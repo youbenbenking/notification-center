@@ -1,0 +1,45 @@
+<!DOCTYPE HTML><html lang="en">
+<!-- 防止IE提示“Internet Explorer已限制此网页运行脚本或ActiveX控件” -->
+<!-- saved from url=(0014)about:internet -->
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    #ballId {
+      background: rgb(19, 167, 19);
+      color: white;
+      width: 70px;
+      text-align: center;
+      height: 70px;
+      line-height: 70px;
+      border-radius: 50%;
+      box-shadow: 5px 5px 40px rgba(0, 0, 0, 0.5);
+      /* 过渡效果在IE下展示效果不友好 */
+      transition: all 0.08s;
+      user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      -webkit-user-select: none;
+      top: 50%;
+      left: 50%;
+      transform: translate3d(-50%, -50%, 0);
+    }
+    
+  </style>
+</head>
+
+<body>
+  <div id="ballId">drag</div>
+  
+
+<script src="static/js/wisdom/suspension-ball.js"></script>
+  <script>
+    // 引入suspension-ball.js，调用suspensionBall()方法，第一个参数传要拖动元素的id，第二个参数传点击后的跳转链接
+    suspensionBall('ballId', 'https://www.baidu.com')
+  </script>
+</body>
+
+</html>
