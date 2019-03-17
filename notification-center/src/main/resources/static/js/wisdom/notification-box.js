@@ -1,21 +1,10 @@
-var dataTableApi;
-var templateMode={}; 
+var stompClient = null;
 
 //页面初始化执行操作
 $(function() {
-	var $html = "<div id='div-onchat' style='position:absolute;margin-top:0px;'><a ><img src='/Content/images/onchat.jpg' style='width:50px;height:50px;border-radius:25px' /></a></div>";
-    $('body').append($html);
-//    $("#div-onchat").click(function () {
-//        var jspath = getJsPath('high-im-onchat.js');
-//        var oid = getParam(jspath, 'oid');
-//        window.open("/ChatManage/Youke/Index?oid=" + oid);
-//    }).offset({ left: $(window).width() - 50, top: $(window).height() / 2 }).draggable({ containment: 'parent' });
-
     
 	    connect();
 	   
-	    
-	    
 	    
 })
 
@@ -23,7 +12,7 @@ $(function() {
 
 
 
-var stompClient = null;
+
 
 function setConnected(connected){
      document.getElementById("connect").disabled = connected;
@@ -31,6 +20,10 @@ function setConnected(connected){
       $("#response").html();
 }
 
+/**
+ * 建立websocket连接(一般为成功登录系统后)
+ * @returns
+ */
 function connect() {
 	  var userId = document.getElementById('user').value;
 	  var notificationHost = document.getElementById('notificationHost').value;
@@ -60,15 +53,16 @@ function connect() {
                     								var list = document.getElementById("msg_ul");
                     								list.insertBefore(li_new,list.childNodes[0]);
                 						});
-                
+                //创建连接成功后,查询历史通知列表
                 loadMessages();
-                
             });
         }
 	    
-	    
+/**
+ * 从客户端主动断开连接
+ * @returns
+ */    
 function disconnect() {
-	//从客户端主动断开连接
         if (stompClient != null) {
              stompClient.disconnect();
         }
@@ -76,23 +70,30 @@ function disconnect() {
         console.log("Disconnected");
  }
         
-
+/**
+ * 从客户端调用send()方法向服务器发送信息
+ * @returns
+ */ 
 function sendName() {
         var name = document.getElementById('name').value;
-        //客户端可使用 send() 方法向服务器发送信息
         stompClient.send("/queue", {}, 
         					JSON.stringify({ 'name': name}));
 }
 
+/**
+ * 清除消息通知列表
+ * @returns
+ */
 function clearMsg(){
 	 $('.cp_list ul li').each(function(){
 		    $(this).remove();
 		});
 }
 
-
-
-//初始加载消息列表
+/**
+ * 初始加载消息列表
+ * @returns
+ */
 function loadMessages(){
 		var data = {};
 		data.srcAppCode = document.getElementById('srcAppCode').value;
