@@ -33,7 +33,7 @@ public class CrossOrginFilter implements Filter{
         response.setHeader("Access-Control-Allow-Headers", "x-requested-with,content-type,Authorization");
         chain.doFilter(req, res);
 		
-        System.out.println("-------filter-------");
+//        System.out.println("-------filter-------");
 	}
 	
 	@Override
