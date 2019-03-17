@@ -41,7 +41,7 @@ public class CleanDataScheduleTask implements SchedulingConfigurer{
 			excete();
 		}, triggerContext ->{
 			//从数据库获取执行周期
-            String cron = cronMapper.getCron();
+            String cron = cronMapper.getCron("cleanData");
             //合法性校验.
             if (StringUtils.isEmpty(cron)) {
                 // Omitted Code ..
