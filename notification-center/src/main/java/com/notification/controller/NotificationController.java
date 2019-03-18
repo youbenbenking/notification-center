@@ -65,8 +65,13 @@ public class NotificationController {
     		}
     		
     		NotificationMessage message = param.getParam();
-        //发送消息队列,异步解耦
-        amqpTemplate.convertAndSend(MQConstant.WISDOM_EXCHANGE, MQConstant.MESSAGE_QUEUE, message);
+        //发送消息队列,异步解耦(即使入队失败不应该影响消息入库)
+    		try {
+    			amqpTemplate.convertAndSend(MQConstant.WISDOM_EXCHANGE, MQConstant.MESSAGE_QUEUE, message);
+    		} catch (Exception e) {
+    			logger.error("消息通知入队异常!",e);
+    		}
+        
         
 	 	//异步处理消息入库及清除消息通知缓存
         threadPoolExecutor.submit(new Runnable() {

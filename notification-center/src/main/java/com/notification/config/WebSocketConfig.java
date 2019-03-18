@@ -21,13 +21,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer{
      */
 	@Override  
     public void configureMessageBroker(MessageBrokerRegistry config) {  
-        config.enableSimpleBroker("/topic","/user");//topic用来广播，user用来实现p2p
+        config.enableSimpleBroker("/topic","/queue");//topic用来广播，user用来实现p2p
+        // 全局使用的消息前缀（客户端订阅路径上会体现出来）
+        config.setApplicationDestinationPrefixes("/app");
     }  
   
     @Override  
     public void registerStompEndpoints(StompEndpointRegistry registry) {  
-        registry.addEndpoint("/webServer").withSockJS();  
-        registry.addEndpoint("/queueServer").withSockJS();//注册两个STOMP的endpoint，分别用于广播和点对点  
+    		//WebSocket的配置也需要支持跨域
+        registry.addEndpoint("/webServer").setAllowedOrigins("*").withSockJS();  
+        registry.addEndpoint("/queueServer").setAllowedOrigins("*").withSockJS();//注册两个STOMP的endpoint，分别用于广播和点对点  
     }  
 
 }

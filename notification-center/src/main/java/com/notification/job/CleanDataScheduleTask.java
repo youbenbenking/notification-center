@@ -23,7 +23,7 @@ import com.notification.dao.CronMapper;
  *
  */
 @Component
-@EnableScheduling
+//@EnableScheduling
 @Configuration
 public class CleanDataScheduleTask implements SchedulingConfigurer{
 	private static Logger logger=LoggerFactory.getLogger(CleanDataScheduleTask.class);

@@ -4,8 +4,6 @@ var stompClient = null;
 $(function() {
     
 	    connect();
-	   
-	    
 })
 
 
@@ -28,11 +26,13 @@ function connect() {
 	  var userId = document.getElementById('user').value;
 	  var notificationHost = document.getElementById('notificationHost').value;
 	  
+	  alert(userId+"=="+notificationHost);
 	  // 建立连接对象（还未发起连接）
       var socket = new SockJS(notificationHost);
       // 获取 STOMP 子协议的客户端对象
+      //如果使用原生的Websockets就使用Stomp.client(url)，如果需要使用其他类型的Websocket（例如由SockJS包装的Websocket）就使用Stomp.over(ws)。
       stompClient = Stomp.over(socket);
-      // 向服务器发起websocket连接并发送CONNECT帧
+      // 向服务器发起websocket连接并发送CONNECT帧,连接是异步的,所以需要一个回调函数知道连接的结果
       stompClient.connect({}, function(frame) {
     	  			// 连接成功时（服务器响应 CONNECTED 帧）的回调方法
                 setConnected(true);
@@ -41,18 +41,22 @@ function connect() {
                 //STOMP 客户端要想接收来自服务器推送的消息，必须先订阅相应的URL，
                 //即发送一个 SUBSCRIBE 帧，然后才能不断接收来自服务器的推送消息；
                 stompClient.subscribe('/user/'+ userId +'/message', 
-                						function(response){
+                						function(message){
                 									//callback为每次收到服务器推送的消息时的回调方法，
                     								//1.创建新的li元素
                     								var li_new = document.createElement('li');
                     								//2.创建新的文本节点
-                    								var textnode=document.createTextNode("新--"+response.body)
+                    								var textnode=document.createTextNode("新--"+message.body)
                     								//3.将文本节点添加到li元素里
                     								li_new.appendChild(textnode)
                     								//4.想ul中头插法插入元素
                     								var list = document.getElementById("msg_ul");
                     								list.insertBefore(li_new,list.childNodes[0]);
-                						});
+                    								
+                    								//客户端调用消息确认机制
+                    								message.ack();
+                						},
+                					    {ack: 'client'});
                 //创建连接成功后,查询历史通知列表
                 loadMessages();
             });
