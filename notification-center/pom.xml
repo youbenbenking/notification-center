@@ -25,7 +25,7 @@
         <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<!-- <scope>test</scope> -->
 		</dependency>
         
          <dependency>
@@ -121,6 +121,11 @@
 				<version>1.2.2</version> 
 			</dependency>
 			
+			 <dependency>
+	            <groupId>com.google.code.gson</groupId>
+	            <artifactId>gson</artifactId>
+        		</dependency>
+			
 			<dependency>
 				<groupId>com.dianping.cat</groupId>
 				<artifactId>cat-client</artifactId>
@@ -168,6 +173,18 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            <!-- 代码生成器插件 -->
+           <plugin>
+			    <groupId>org.mybatis.generator</groupId>
+			    <artifactId>mybatis-generator-maven-plugin</artifactId>
+			    <configuration>
+				        <verbose>true</verbose>
+				        <overwrite>true</overwrite>
+				         <!--配置文件的路径-->
+		         		<!-- <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>  -->
+		    		</configuration>
+			</plugin>
         </plugins>
     </build>
   
