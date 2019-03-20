@@ -43,10 +43,10 @@ public class NotificationController {
 	private AmqpTemplate amqpTemplate;
 	
 	@Autowired
-	private RedisUtil redisUtil;
+	private NotificationLogMapper notificationLogMapper;
 	
 	@Autowired
-	 private NotificationLogMapper notificationLogMapper;
+	private RedisUtil redisUtil;
 	
 	private static ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 30,
             TimeUnit.SECONDS, new LinkedBlockingDeque<>());
@@ -54,57 +54,34 @@ public class NotificationController {
    
     @RequestMapping(value = "/appUserMsg", method = RequestMethod.POST)
     public Object robotSerchResultCaseStop(@RequestBody RestfulParamVo<NotificationMessage> param) {
-    		//验证参数信息
+    		//1.参数,token信息验证
     		if(param == null || StringUtils.isEmpty(param.getToken())) {
     			new ReturnMessage(false, "参数信息错误！");
     		}
     		
-    		//校验token
     		if(!param.getToken().equalsIgnoreCase("7ec864cfa06538146515ff2f21824f60") ) {
     			new ReturnMessage(false, "token验证失败！");
     		}
     		
-    		NotificationMessage message = param.getParam();
-        //发送消息队列,异步解耦(即使入队失败不应该影响消息入库)
+    		//2.消息入库,默认[待发送]
+    		NotificationLog notificationLog = new NotificationLog();
+    		notificationLog.setSrcAppCode(param.getParam().getSrcAppCode());
+    		notificationLog.setTargetUserName(param.getParam().getDataEntity().getTargetUsername());
+    		notificationLog.setMsgTitle(param.getParam().getDataEntity().getMessage().getTitle());
+    		notificationLog.setMsgDesc(param.getParam().getDataEntity().getMessage().getDesc());
+    		notificationLog.setMsgLink(param.getParam().getDataEntity().getMessage().getLink());
+    		notificationLog.setMsgType(param.getParam().getDataEntity().getMessage().getType());
+    		notificationLog.setCreateTime(new Date());
+    		
+    		notificationLogMapper.insertSelective(notificationLog);
+    		
+        //3.发送消息队列,异步解耦,提高并发(即使入队失败不应该影响消息入库)
     		try {
-    			amqpTemplate.convertAndSend(MQConstant.WISDOM_EXCHANGE, MQConstant.MESSAGE_QUEUE, message);
+    			amqpTemplate.convertAndSend(MQConstant.WISDOM_EXCHANGE, MQConstant.MESSAGE_QUEUE, notificationLog.getId());
     		} catch (Exception e) {
     			logger.error("消息通知入队异常!",e);
     		}
         
-        
-	 	//异步处理消息入库及清除消息通知缓存
-        threadPoolExecutor.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-	        			String srcAppCode = message.getSrcAppCode();
-	        			String targetUsername = message.getDataEntity().getTargetUsername();
-	        			
-	            		NotificationLog notificationLog = new NotificationLog();
-	            		notificationLog.setSrcAppCode(srcAppCode);
-	            		notificationLog.setTargetUserName(targetUsername);
-	            		notificationLog.setMsgTitle(message.getDataEntity().getMessage().getTitle());
-	            		notificationLog.setMsgDesc(message.getDataEntity().getMessage().getDesc());
-	            		notificationLog.setMsgLink(message.getDataEntity().getMessage().getLink());
-	            		notificationLog.setMsgType(message.getDataEntity().getMessage().getType());
-	            		notificationLog.setCreateTime(new Date());
-	            		
-	            		notificationLogMapper.insertSelective(notificationLog);
-	        			
-	            		try {
-	            			redisUtil.del(srcAppCode+"_"+targetUsername);
-	            		} catch (Exception e) {
-	            			logger.error("消息通知删除Redis缓存异常!",e);
-	            		}
-	        			
-        			
-                } catch (Exception e) {
-                    logger.error("异步处理消息入库及清除消息通知缓存异常，请求参数:{}", message, e);
-                }
-            }
-        });
-    		
         return new ReturnMessage(true, "消息入队成功！");
     }
     

@@ -22,5 +22,7 @@ public interface NotificationLogMapper {
     int updateByPrimaryKey(NotificationLog record);
     
     List<NotificationLog> selectMessages(@Param("srcAppCode") String srcAppCode, @Param("userName") String userName);
+    
+    int updateStatusByPrimaryKey(@Param("msgId") Long msgId, @Param("status") int status);
      
 }

@@ -37,7 +37,7 @@
       #{msgType,jdbcType=VARCHAR}, #{status,jdbcType=SMALLINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.notification.model.NotificationLog" >
+  <insert id="insertSelective" parameterType="com.notification.model.NotificationLog" keyProperty="id" useGeneratedKeys="true">
     insert into wisdom_notification_log
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -163,4 +163,12 @@
     	limit 10
     		
   </select>
+  
+  
+  <update id="updateStatusByPrimaryKey" >
+    update wisdom_notification_log
+    set 
+      status = #{status,jdbcType=SMALLINT}
+    where id = #{msgId,jdbcType=BIGINT}
+  </update>
 </mapper>

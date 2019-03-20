@@ -8,10 +8,6 @@ $(function() {
 
 
 
-
-
-
-
 function setConnected(connected){
      document.getElementById("connect").disabled = connected;
      document.getElementById("disconnect").disabled = !connected;
@@ -26,7 +22,6 @@ function connect() {
 	  var userId = document.getElementById('user').value;
 	  var notificationHost = document.getElementById('notificationHost').value;
 	  
-	  alert(userId+"=="+notificationHost);
 	  // 建立连接对象（还未发起连接）
       var socket = new SockJS(notificationHost);
       // 获取 STOMP 子协议的客户端对象
@@ -53,10 +48,7 @@ function connect() {
                     								var list = document.getElementById("msg_ul");
                     								list.insertBefore(li_new,list.childNodes[0]);
                     								
-                    								//客户端调用消息确认机制
-                    								message.ack();
-                						},
-                					    {ack: 'client'});
+                						});
                 //创建连接成功后,查询历史通知列表
                 loadMessages();
             });

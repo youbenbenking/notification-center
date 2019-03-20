@@ -22,7 +22,7 @@ public class NotificationLog {
     private Date createTime;
 
     private Date updateTime;
-
+    
     public Long getId() {
         return id;
     }

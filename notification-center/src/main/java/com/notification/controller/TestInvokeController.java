@@ -4,23 +4,17 @@ package com.notification.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.thymeleaf.TemplateEngine;
 
 import com.alibaba.fastjson.JSONObject;
 import com.notification.model.DataEntity;
 import com.notification.model.MessageEntity;
 import com.notification.model.NotificationMessage;
 import com.notification.model.ReturnMessage;
-import com.notification.service.MailService;
 import com.notification.util.HttpClientUtil;
 
 
@@ -32,13 +26,6 @@ import com.notification.util.HttpClientUtil;
 public class TestInvokeController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	 
-	@Autowired
-	private MailService mailService;
-	
-	@Autowired
-	private TemplateEngine templateEngine;
-	
-	
 	 @Value("${notification_message_server_url}")
 	 private String notificationMessageServerUrl;
     
@@ -89,18 +76,5 @@ public class TestInvokeController {
 	   
 		return returnMessage;
    }
-   
-   
-   
-   
-   @RequestMapping("/sendEmail")
-   @ResponseBody
-   public String sendSimpleMail() {
-		String to = "787438152@qq.com";
-		String subject = "test simple mail";
-		String content = "hello, this is simple mail";
-		mailService.sendSimpleMail(to, subject, content);
-		return "success";
-	}
    
 }
