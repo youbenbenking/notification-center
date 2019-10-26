@@ -9,7 +9,7 @@
     <result column="msg_desc" property="msgDesc" jdbcType="VARCHAR" />
     <result column="msg_link" property="msgLink" jdbcType="VARCHAR" />
     <result column="msg_type" property="msgType" jdbcType="VARCHAR" />
-    <result column="sstatus" property="sstatus" jdbcType="SMALLINT" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
