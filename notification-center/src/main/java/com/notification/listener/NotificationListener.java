@@ -3,7 +3,7 @@ package com.notification.listener;
 import com.notification.constant.MQConstant;
 import com.notification.dao.NotificationLogMapper;
 import com.notification.model.NotificationLog;
-import com.notification.redis.RedisUtil;
+import com.notification.redis.RedisClient;
 
 import org.slf4j.*;
 import org.springframework.amqp.rabbit.annotation.*;
@@ -29,7 +29,7 @@ public class NotificationListener {
     
 
 	@Autowired
-	private RedisUtil redisUtil;
+	private RedisClient redisUtil;
 
     /**
      * 这里监听外部系统调用消息中心推送消息,服务端-->客户端的即时通知,所以处理要快,

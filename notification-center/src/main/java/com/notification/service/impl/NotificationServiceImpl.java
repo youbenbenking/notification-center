@@ -17,9 +17,9 @@ public class NotificationServiceImpl implements NotificationService {
 	private NotificationLogMapper notificationLogMapper;
 
 	@Override
-	public NotificationLog save(NotificationLog notificationLog) {
+	public Long save(NotificationLog notificationLog) {
 		notificationLogMapper.insertSelective(notificationLog);
-		return new NotificationLog();
+		return notificationLog.getId();
 	}
 
 	@Override

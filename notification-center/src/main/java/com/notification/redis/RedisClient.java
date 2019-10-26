@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 @Component
-public class RedisUtil {
+public class RedisClient {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;

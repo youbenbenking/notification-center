@@ -7,10 +7,10 @@ public enum ResultCode {
 	DATA_NOT_FOUND(-1, "数据不存在，{0}"),
 	ILLEGAL_PARAMETER(-2, "参数不合法，{%s}={%s}"),
 
-	TOKEN_VALIDATE_FIALD(-3, "token验证失败."),
-	MSG_ENTER_QUEUE_FIALD(-4, "消息通知入队异常."),
-	QUERY_CHANE_MSG_FIALD(-4, "获取缓存消息异常."),
-	SET_CHANE_MSG_FIALD(-4, "设置缓存消息异常.")
+	TOKEN_VALIDATE_FAILED(-3, "token验证失败."),
+	MSG_ENTER_QUEUE_FAILED(-4, "消息通知入队异常."),
+	QUERY_CHANE_MSG_FAILED(-4, "获取缓存消息异常."),
+	SET_CHANE_MSG_FAILED(-4, "设置缓存消息异常.")
 	;
 	
 	private final Integer code;
