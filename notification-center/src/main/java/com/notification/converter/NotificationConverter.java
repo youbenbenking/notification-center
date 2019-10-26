@@ -1,10 +1,12 @@
-package com.notification.convert;
+package com.notification.converter;
 
 import java.util.Date;
 
 import com.notification.domain.model.NotificationLog;
 import com.notification.domain.model.NotificationMessage;
 import com.notification.domain.vo.RestfulParamVo;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,7 +14,15 @@ import org.springframework.stereotype.Component;
  * @Description: 消息通知转换器
  */
 @Component
-public class NotificationConvertor {
+@Slf4j
+public class NotificationConverter {
+
+    private  GeneralCopyConverter generalCopyConverter;
+
+    @Autowired
+    public NotificationConverter(GeneralCopyConverter generalCopyConverter) {
+        this.generalCopyConverter = generalCopyConverter;
+    }
 
     public NotificationLog convertToDto(RestfulParamVo<NotificationMessage> param) {
         NotificationLog notificationLog = new NotificationLog();

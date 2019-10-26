@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.notification.common.constant.LogTypeConstants;
 import com.notification.common.result.ResponseWrapper;
-import com.notification.convert.NotificationConvertor;
+import com.notification.converter.NotificationConverter;
 import com.notification.integration.CacheMessageClient;
 import com.notification.integration.MQMessageClient;
 import com.notification.domain.model.NotificationLog;
@@ -38,7 +38,7 @@ public class NotificationController {
     @Autowired
     private NotificationService notificationService;
     @Autowired
-    private NotificationConvertor notificationConvertor;
+    private NotificationConverter notificationConvertor;
     @Autowired
     private NotificationValidator notificationValidator;
     @Autowired
