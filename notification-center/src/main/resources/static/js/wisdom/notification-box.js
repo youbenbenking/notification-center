@@ -11,7 +11,7 @@ $(function() {
 function setConnected(connected){
      document.getElementById("connect").disabled = connected;
      document.getElementById("disconnect").disabled = !connected;
-      $("#response").html();
+      $("#result").html();
 }
 
 /**

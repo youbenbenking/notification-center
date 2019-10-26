@@ -2,10 +2,9 @@ package com.notification.validate;
 
 import java.util.Objects;
 
-import com.notification.enums.ResultCode;
-import com.notification.exception.BadRequestException;
-import com.notification.model.NotificationMessage;
-import com.notification.vo.RestfulParamVo;
+import com.notification.domain.model.NotificationMessage;
+import com.notification.domain.vo.RestfulParamVo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -15,6 +14,7 @@ import org.springframework.util.Assert;
  * @Description: 消息通知验证器
  */
 @Component
+@Slf4j
 public class NotificationValidator {
 
     public void validateReceive(RestfulParamVo<NotificationMessage> restfulParamVo) {

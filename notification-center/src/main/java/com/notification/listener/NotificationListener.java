@@ -1,8 +1,8 @@
 package com.notification.listener;
 
-import com.notification.constant.MQConstant;
+import com.notification.common.constant.MQConstant;
 import com.notification.dao.NotificationLogMapper;
-import com.notification.model.NotificationLog;
+import com.notification.domain.model.NotificationLog;
 import com.notification.redis.RedisClient;
 
 import org.slf4j.*;

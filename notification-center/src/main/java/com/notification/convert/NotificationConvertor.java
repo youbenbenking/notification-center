@@ -2,9 +2,9 @@ package com.notification.convert;
 
 import java.util.Date;
 
-import com.notification.model.NotificationLog;
-import com.notification.model.NotificationMessage;
-import com.notification.vo.RestfulParamVo;
+import com.notification.domain.model.NotificationLog;
+import com.notification.domain.model.NotificationMessage;
+import com.notification.domain.vo.RestfulParamVo;
 import org.springframework.stereotype.Component;
 
 /**

@@ -29,7 +29,7 @@
         </javaTypeResolver>  
      
      	<!--生成Model类存放位置-->
-        <javaModelGenerator targetPackage="com.notification.model" targetProject="src/main/java">  
+        <javaModelGenerator targetPackage="com.notification.domain.model" targetProject="src/main/java">
             <property name="enableSubPackages" value="false"/>  
             <property name="trimStrings" value="true"/>  
         </javaModelGenerator>

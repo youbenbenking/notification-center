@@ -1,21 +1,22 @@
 package com.notification.aspect;
 
-
 import java.util.Objects;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.alibaba.fastjson.JSON;
+import com.notification.common.constant.LogTypeConstants;
+import com.notification.common.enums.ResultCode;
+import com.notification.common.exception.ApiException;
+import com.notification.common.result.BaseResult;
+import com.notification.common.result.ResponseWrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.MDC;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-
-import com.notification.enums.ResultCode;
-import com.notification.response.ResponseWrapper;
 
 /**
  * @author:youb
@@ -26,10 +27,9 @@ import com.notification.response.ResponseWrapper;
  */
 @Component
 @Aspect
+@Slf4j(topic = LogTypeConstants.WEB_LOGGER)
 @Profile("!test")
 public class UnifiedHandlerAspect {
-	
-	private static final Log logger = LogFactory.getLog(UnifiedHandlerAspect.class);
    
 	 @Around(value = "execution( * com.notification.controller..*.*(..))")
 	    public Object around(ProceedingJoinPoint pjp) throws Throwable {
@@ -46,27 +46,30 @@ public class UnifiedHandlerAspect {
 	            obj = pjp.proceed();
 	            return obj;
 	        }  catch (Throwable e) {
-	        	// 无权限错误不打印error日志
-	        	if (StringUtils.contains(e.getMessage(), "无权限")) {
-					logger.warn(e.getMessage(), e);
-				}else {
-					logger.error(e.getMessage(), e);
-				}
-	        	
+	        	// 这里可以设定什么样类型异常不打印错误日志，如：无权限
+	        	log.error(e.getMessage(), e);
+
 	        	exceuteFlag = false;
-	        	
-	        	StringBuilder sb = new StringBuilder();
-	        	sb.append(Objects.isNull(e.getMessage()) ? "内部系统错误" : e.getMessage());
+				exceptionMessage = e.getMessage();
+
+	        	StringBuilder str = new StringBuilder();
+	        	str.append(Objects.isNull(e.getMessage()) ? "内部系统错误" : e.getMessage());
 	        	if (ResponseWrapper.class.isAssignableFrom(returnType)) {
-					return ResponseWrapper.fail(ResultCode.SYSTEM_ERROR, e.getMessage());
-				}else {
-					// 这里进行其他类型判断
-					return null;
+					final ResultCode resultCode = e instanceof ApiException ? ((ApiException)e).getResultcode() : ResultCode.SYSTEM_ERROR;
+					return ResponseWrapper.fail(resultCode, e.getMessage());
+				}else{
+					return BaseResult.fail(str.toString());
 				}
-	        
 	        }finally {
-				// 这里进行日志打印
+	        	long executeTime = System.currentTimeMillis() - startTime;
+	        	if (exceuteFlag){
+	        		log.info("{}|{}|{}|{}|{}", signature.getDeclaringTypeName() + "#" +signature.getName(), JSON.toJSONString(pjp.getArgs()),
+						executeTime, exceuteFlag, JSON.toJSONString(obj));
+				}else {
+	        		log.error("{}|{}|{}|{}|{}", signature.getDeclaringTypeName() + "#" +signature.getName(), JSON.toJSONString(pjp.getArgs()),
+						executeTime, exceuteFlag, exceptionMessage);
+				}
+				MDC.clear();
 			}
-	        
 	    }
 }

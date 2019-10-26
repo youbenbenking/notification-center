@@ -17,7 +17,7 @@ var stompClient = null;
 function setConnected(connected){
      document.getElementById("connect").disabled = connected;
      document.getElementById("disconnect").disabled = !connected;
-      $("#response").html();
+      $("#result").html();
 }
 
 function connect() {
@@ -29,7 +29,7 @@ function connect() {
                 console.log('Connected: ' + frame);
                 
                 stompClient.subscribe('/topic/getResponse', function(response){
-                    var response1 = document.getElementById('response');
+                    var response1 = document.getElementById('result');
                     var p = document.createElement('p');
                     p.style.wordWrap = 'break-word';
                     p.appendChild(document.createTextNode(response.body));

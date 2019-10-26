@@ -1,9 +1,13 @@
 package com.notification.aspect;
 
-import com.google.gson.Gson;
-import com.notification.service.MailService;
-import com.notification.util.AspectJUtil;
+import com.alibaba.fastjson.JSON;
 
+import com.google.gson.Gson;
+import com.notification.common.constant.LogTypeConstants;
+import com.notification.service.MailService;
+import com.notification.common.util.AspectJUtil;
+
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -20,8 +24,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Aspect
+@Slf4j
 public class EmailExceptionInfoAspect {
-    private static final Log logger = LogFactory.getLog(EmailExceptionInfoAspect.class);
 
     @Autowired
 	private MailService mailService;
@@ -47,16 +51,12 @@ public class EmailExceptionInfoAspect {
      */
     private void sendMsg(ProceedingJoinPoint pjp, Exception e) {
         try {
-            Gson gson = new Gson();
-            String parms = gson.toJson(pjp.getArgs());
             String title =String.format("执行【%s】异常", AspectJUtil.getMethod(pjp));
-            String body= String.format("请求参数:【%s】,异常原因:【%s】", parms, e.toString());
+            String body= String.format("请求参数:【%s】,异常原因:【%s】", JSON.toJSONString(pjp.getArgs()), e.toString());
             
             mailService.sendEmailNotice(title,body);
-            
-            logger.error("allexception around exception1", new Exception(body));
         } catch (Exception ex) {
-            logger.error("allexception around exception2", ex);
+            log.error("EmailExceptionInfoAspect#sendMsg error", ex.getMessage(), ex);
         }
     }
 }

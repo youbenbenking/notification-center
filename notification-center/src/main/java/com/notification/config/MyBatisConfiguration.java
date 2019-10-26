@@ -38,7 +38,7 @@ public class MyBatisConfiguration {
     public SqlSessionFactory sqlSessionFactoryBean() throws Exception{
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(getDataSource());//注入数据源
-        bean.setTypeAliasesPackage("com.notification.model");//设置别名
+        bean.setTypeAliasesPackage("com.notification.domain.model");//设置别名
 
         //显式指定Mapper文件位置,当Mapper文件跟对应的Mapper接口处于同一位置的时候可以不用指定该属性的值
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();

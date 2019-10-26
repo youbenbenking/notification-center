@@ -5,7 +5,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import com.notification.model.ReceiveMessage;
+import com.notification.domain.model.ReceiveMessage;
 
 
 @Controller

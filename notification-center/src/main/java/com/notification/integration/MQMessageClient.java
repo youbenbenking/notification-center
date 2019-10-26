@@ -1,9 +1,9 @@
 package com.notification.integration;
 
-import com.notification.constant.LogTypeConstants;
-import com.notification.constant.MQConstant;
-import com.notification.enums.ResultCode;
-import com.notification.exception.BadRequestException;
+import com.notification.common.constant.LogTypeConstants;
+import com.notification.common.constant.MQConstant;
+import com.notification.common.enums.ResultCode;
+import com.notification.common.exception.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

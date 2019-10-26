@@ -2,7 +2,7 @@ package com.notification.service;
 
 import java.util.List;
 
-import com.notification.model.NotificationLog;
+import com.notification.domain.model.NotificationLog;
 
 public interface NotificationService {
 
